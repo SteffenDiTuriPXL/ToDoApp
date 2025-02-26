@@ -142,5 +142,13 @@
       "title": "My to do's"
     },
     "title": "My to do's"
+  },
+  "module": {
+    "todos": {
+      "create_todo_dialog": {
+        "title": "New to do",
+        "description": "Add a new to do."
+      }
+    }
   }
 }

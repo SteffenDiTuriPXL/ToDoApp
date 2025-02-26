@@ -9,6 +9,7 @@ import { z } from 'zod'
 
 import AppDialogActions from '@/components/app/dialog/AppDialogActions.vue'
 import AppDialogContent from '@/components/app/dialog/AppDialogContent.vue'
+import AppDialogHeader from '@/components/app/dialog/AppDialogHeader.vue'
 import AppForm from '@/components/form/AppForm.vue'
 import FormSubmitButton from '@/components/form/FormSubmitButton.vue'
 import { useApiErrorToast } from '@/composables/api-error-toast/apiErrorToast.composable.ts'
@@ -54,26 +55,32 @@ function onClose(): void {
 <template>
   <VcDialog @close="onClose">
     <AppDialogContent class="w-dialog-sm">
-      <AppForm :form="form">
-        <VcTextField
-          v-bind="toFormField(todoTitle)"
-          label="Title"
-        />
-        <VcTextField
-          v-bind="toFormField(description)"
-          label="Description"
-        />
-        <VcTextField
-          v-bind="toFormField(deadline)"
-          label="Deadline"
-        />
-        <AppDialogActions>
-          <FormSubmitButton
-            :form="form"
-            :label="i18n.t('shared.save')"
+      <AppDialogHeader
+        :title="i18n.t('module.todos.create_todo_dialog.title')"
+        :description="i18n.t('module.todos.create_todo_dialog.description')"
+      />
+      <div class="py-4">
+        <AppForm :form="form">
+          <VcTextField
+            v-bind="toFormField(todoTitle)"
+            label="Title"
           />
-        </AppDialogActions>
-      </AppForm>
+          <VcTextField
+            v-bind="toFormField(description)"
+            label="Description"
+          />
+          <VcTextField
+            v-bind="toFormField(deadline)"
+            label="Deadline"
+          />
+          <AppDialogActions>
+            <FormSubmitButton
+              :form="form"
+              :label="i18n.t('shared.save')"
+            />
+          </AppDialogActions>
+        </AppForm>
+      </div>
     </AppDialogContent>
   </VcDialog>
 </template>

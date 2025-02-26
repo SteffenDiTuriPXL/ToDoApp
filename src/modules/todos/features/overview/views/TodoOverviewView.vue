@@ -1,36 +1,36 @@
 <!-- eslint-disable ts/explicit-function-return-type -->
-<script setup>
-import { useDialog, VcIconButton } from '@wisemen/vue-core'
-import { onMounted, ref } from 'vue'
+<script setup lang="ts">
+import {
+  useDialog,
+  usePagination,
+  VcIconButton,
+} from '@wisemen/vue-core'
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 
-import { getTodosControllerGetTodosV1 } from '@/client'
+import AppSearchInputField from '@/components/app/AppSearchInputField.vue'
+import AppErrorState from '@/components/app/error-state/AppErrorState.vue'
 import AppPage from '@/components/layout/AppPage.vue'
+import type { TodoIndex } from '@/models/todo/index/todoIndex.model'
+import type { ToDoIndexFilters } from '@/models/todo/index/todoIndexFilters.model'
+import { useTodoIndexQuery } from '@/modules/todos/api/queries/todoIndex.query'
+import TodoList from '@/modules/todos/features/overview/components/TodoList.vue'
 
-import TodoList from '../components/TodoList.vue'
+const i18n = useI18n()
 
-// eslint-disable-next-line require-explicit-generics/require-explicit-generics
-const todos = ref([])
-// eslint-disable-next-line require-explicit-generics/require-explicit-generics
-const loading = ref(true)
+const pagination = usePagination<ToDoIndexFilters>({
+  isRouteQueryEnabled: true,
+  key: 'todos',
+})
 
-async function fetchTodos() {
-  try {
-    const response = await getTodosControllerGetTodosV1()
+const todoIndexQuery = useTodoIndexQuery(pagination.paginationOptions)
+const todos = computed<TodoIndex[]>(() => todoIndexQuery.data.value?.data as TodoIndex[] || [])
 
-    todos.value = response.data.todos
-  }
-  catch (error) {
-    console.error('Error fetching todos:', error)
-  }
-  finally {
-    loading.value = false
-  }
-}
-
-onMounted(fetchTodos)
+const isLoading = computed<boolean>(() => todoIndexQuery.isLoading.value)
+const error = computed<unknown>(() => todoIndexQuery.error.value)
 
 const dialog = useDialog({
-  component: () => import('../components/TodoCreateDialog.vue'),
+  component: () => import('@/modules/todos/features/overview/components/TodoCreateDialog.vue'),
 })
 
 async function onClick() {
@@ -39,18 +39,37 @@ async function onClick() {
 </script>
 
 <template>
-  <AppPage :title="$t('todos.title')">
-    <TodoList
-      :todos="todos"
-      :loading="loading"
-      class="w-full"
-    />
+  <AppPage :title="i18n.t('todos.title')">
+    <div
+      v-if="error !== null"
+      class="flex size-full flex-1 items-center justify-center"
+    >
+      <AppErrorState :error="error" />
+    </div>
 
-    <VcIconButton
-      variant="secondary"
-      icon="plus"
-      label="NewToDO"
-      @click="onClick"
-    />
+    <div
+      v-else
+      class="flex flex-col gap-lg flex-1"
+    >
+      <AppSearchInputField
+        :is-loading="todoIndexQuery.isLoading.value"
+        :pagination="pagination"
+      />
+
+      <TodoList
+        :todos="todos"
+        :is-loading="isLoading"
+        :pagination="pagination"
+        :error="todoIndexQuery.error.value"
+        class="w-full"
+      />
+
+      <VcIconButton
+        variant="secondary"
+        icon="plus"
+        label="NewToDO"
+        @click="onClick"
+      />
+    </div>
   </AppPage>
 </template>
