@@ -1,6 +1,7 @@
 import type { PaginationOptions } from '@wisemen/vue-core'
 import type { ComputedRef } from 'vue'
 
+import type { ToDoIndexFilters } from '@/models/todo/index/todoIndexFilters.model'
 import type { UserIndexFilters } from '@/models/user/index/userIndexFilters.model'
 import type { UserUuid } from '@/models/user/userUuid.model'
 
@@ -10,6 +11,9 @@ interface ProjectQueryKeys {
     userUuid: ComputedRef<string | null>
   }
   roles: void
+  todoIndex: {
+    paginationOptions?: ComputedRef<PaginationOptions<ToDoIndexFilters>>
+  }
   userDetail: {
     userUuid: ComputedRef<UserUuid>
   }
