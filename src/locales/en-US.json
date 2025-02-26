@@ -132,5 +132,15 @@
   "validation.too_small_date": "Must be after {count}",
   "validation.too_small_number": "Must be greater than or equal to {count}",
   "validation.too_small_string": "Must be at least {count} character | Must be at least {count} characters",
-  "validation.unauthorized": "Unauthorized"
+  "validation.unauthorized": "Unauthorized",
+  "todos": {
+    "createDialog": {
+      "title": "New to do",
+      "createButton": "Save"
+    },
+    "overview": {
+      "title": "My to do's"
+    },
+    "title": "My to do's"
+  }
 }

@@ -1,4 +1,4 @@
-<script  lang="ts" setup="">
+<script lang="ts" setup="">
 import { VcDialog, VcTextField } from '@wisemen/vue-core'
 import { useForm } from 'formango'
 import { useI18n } from 'vue-i18n'
@@ -48,12 +48,8 @@ function onClose(): void {
 </script>
 
 <template>
-  <VcDialog
-    @close="onClose"
-  >
-    <AppDialogContent
-      class="w-dialog-sm"
-    >
+  <VcDialog @close="onClose">
+    <AppDialogContent class="w-dialog-sm">
       <AppDialogHeader
         :title="i18n.t('module.setting.roles_and_permissions.create_role_dialog.title')"
         :description="i18n.t('module.setting.roles_and_permissions.create_role_dialog.description')"
