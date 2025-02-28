@@ -1,3 +1,5 @@
+import type { CalendarDate } from '@/models/date/calendarDate.model'
+
 import type { TodoUuid } from '../todoUuid.model'
 
 export interface ToDoDetail {
@@ -6,6 +8,6 @@ export interface ToDoDetail {
   createdAt: Date
   updatedAt: Date
   isCompleted: boolean
-  deadline: string | null
+  deadline: CalendarDate | null
   description: string | null
 }

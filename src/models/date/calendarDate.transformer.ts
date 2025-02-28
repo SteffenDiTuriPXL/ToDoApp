@@ -17,7 +17,7 @@ export class CalendarDateTransformer {
     return new Date(date) as CalendarDate
   }
 
-  static fromDto(date: CalendarDateDto): CalendarDate {
+  static fromDto(date: string): CalendarDate {
     return new Date(date) as CalendarDate
   }
 

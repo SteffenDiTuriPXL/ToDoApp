@@ -35,7 +35,7 @@ export class TodoCreateTransformer {
   static toDto(form: TodoCreateForm): ToDoCreateDto {
     return {
       title: form.title,
-      deadline: CalendarDateTransformer.toDto(form.deadline),
+      deadline: form.deadline ? CalendarDateTransformer.toDto(form.deadline) : null,
       description: form.description,
     }
   }
@@ -49,7 +49,9 @@ export class ToDoTransformer {
       createdAt: dto.createdAt ? CalendarDateTransformer.fromDto(dto.createdAt as CalendarDateDto) : new Date(),
       updatedAt: dto.updatedAt ? CalendarDateTransformer.fromDto(dto.createdAt as CalendarDateDto) : new Date(),
       isCompleted: dto.completed,
-      deadline: dto.deadline,
+      deadline: dto.deadline
+        ? CalendarDateTransformer.fromDto(dto.deadline)
+        : null,
       description: dto.description,
     }
   }

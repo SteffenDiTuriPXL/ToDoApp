@@ -10,7 +10,7 @@ import { useI18n } from 'vue-i18n'
 import AppDialogActions from '@/components/app/dialog/AppDialogActions.vue'
 import AppForm from '@/components/form/AppForm.vue'
 import FormSubmitButton from '@/components/form/FormSubmitButton.vue'
-import { useApiErrorToast } from '@/composables/api-error-toast/apiErrorToast.composable.ts'
+import { useApiErrorToast } from '@/composables/api-error-toast/apiErrorToast.composable'
 import { toFormField } from '@/helpers/formango.helper'
 import { todoCreateSchema } from '@/models/todo/create/todoCreateForm.model'
 import type { ToDoDetail } from '@/models/todo/index/todo.model'
@@ -56,17 +56,9 @@ const form = useForm({
   },
 })
 
-// console.log('Title: ', props.todoDetail?.title)
-// console.log('Description: ', props.todoDetail?.value.description)
-// console.log('Deadline: ', CalendarDateTransformer.toDto(props.todoDetail?.value.deadline))
-
-// const todoTitle = form.register('title', props.todoDetail.value.title)
-// const description = form.register('description', props.todoDetail.value.description)
-// const deadline = form.register('deadline')
-
-const todoTitle = form.register('title')
-const description = form.register('description')
-const deadline = form.register('deadline')
+const todoTitle = form.register('title', props.todoDetail?.title)
+const description = form.register('description', props.todoDetail?.description)
+const deadline = form.register('deadline', props.todoDetail?.deadline)
 
 function onClose(): void {
   emit('close')
