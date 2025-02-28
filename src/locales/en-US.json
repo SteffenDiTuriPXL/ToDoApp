@@ -148,6 +148,10 @@
       "create_todo_dialog": {
         "title": "New to do",
         "description": "Add a new to do."
+      },
+      "update_todo_dialog": {
+        "title": "My to do",
+        "description": " "
       }
     }
   }

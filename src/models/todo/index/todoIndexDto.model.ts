@@ -1,3 +1,3 @@
 import type { GetTodosResponseItem } from '@/client'
 
-export type TodoDto = GetTodosResponseItem
+export type TodoIndexDto = GetTodosResponseItem

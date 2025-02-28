@@ -145,6 +145,10 @@
       "create_todo_dialog": {
         "title": "Nieuwe to do",
         "description": "Maak een nieuwe to do aan."
+      },
+      "update_todo_dialog": {
+        "title": "Mijn to do",
+        "description": " "
       }
     }
   }

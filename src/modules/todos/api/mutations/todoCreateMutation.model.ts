@@ -8,14 +8,10 @@ import { TodoService } from '../services/todo.service'
 export function useToDoCreateMutation(): UseMutationReturnType<TodoCreateForm, void> {
   return useMutation<TodoCreateForm, void>({
     queryFn: async ({ body }: { body: TodoCreateForm }) => {
-      await TodoService.create(body.title, body.description, body.deadline)
+      await TodoService.create(body)
     },
     queryKeysToInvalidate: {
-      todoIndex: {
-        paginationOptions: () => {
-          return undefined
-        },
-      },
+      todoIndex: {},
     },
   })
 }

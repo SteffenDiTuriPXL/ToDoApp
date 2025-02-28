@@ -11,6 +11,9 @@ interface ProjectQueryKeys {
     userUuid: ComputedRef<string | null>
   }
   roles: void
+  todoDetail: {
+    todoUuid: ComputedRef<string | null>
+  }
   todoIndex: {
     paginationOptions?: ComputedRef<PaginationOptions<ToDoIndexFilters>>
   }
@@ -23,5 +26,5 @@ interface ProjectQueryKeys {
 }
 
 declare module '@wisemen/vue-core-query' {
-  interface QueryKeys extends ProjectQueryKeys {}
+  interface QueryKeys extends ProjectQueryKeys { }
 }

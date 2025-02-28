@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import {
   VcDateField,
-  VcDialog,
   VcTextarea,
   VcTextField,
 } from '@wisemen/vue-core'
@@ -9,19 +8,17 @@ import { useForm } from 'formango'
 import { useI18n } from 'vue-i18n'
 
 import AppDialogActions from '@/components/app/dialog/AppDialogActions.vue'
-import AppDialogContent from '@/components/app/dialog/AppDialogContent.vue'
-import AppDialogHeader from '@/components/app/dialog/AppDialogHeader.vue'
 import AppForm from '@/components/form/AppForm.vue'
 import FormSubmitButton from '@/components/form/FormSubmitButton.vue'
 import { useApiErrorToast } from '@/composables/api-error-toast/apiErrorToast.composable.ts'
 import { toFormField } from '@/helpers/formango.helper'
 import { todoCreateSchema } from '@/models/todo/create/todoCreateForm.model'
-import type { TodoUuid } from '@/models/todo/todoUuid.model'
+import type { ToDoDetail } from '@/models/todo/index/todo.model'
 import { useToDoCreateMutation } from '@/modules/todos/api/mutations/todoCreateMutation.model'
 import { useToDoUpdateMutation } from '@/modules/todos/api/mutations/todoUpdateMutation.model'
 
 const props = defineProps<{
-  todoUuid?: TodoUuid
+  todoDetail?: ToDoDetail
 }>()
 
 const emit = defineEmits<{
@@ -38,11 +35,11 @@ const form = useForm({
   schema: todoCreateSchema,
   onSubmit: async (values) => {
     try {
-      if (props.todoUuid) {
+      if (props.todoDetail) {
         await todoUpdateMutation.execute({
           body: values,
           params: {
-            todoUuid: props.todoUuid,
+            todoUuid: props.todoDetail.uuid,
           },
         })
       }
@@ -59,6 +56,14 @@ const form = useForm({
   },
 })
 
+// console.log('Title: ', props.todoDetail?.title)
+// console.log('Description: ', props.todoDetail?.value.description)
+// console.log('Deadline: ', CalendarDateTransformer.toDto(props.todoDetail?.value.deadline))
+
+// const todoTitle = form.register('title', props.todoDetail.value.title)
+// const description = form.register('description', props.todoDetail.value.description)
+// const deadline = form.register('deadline')
+
 const todoTitle = form.register('title')
 const description = form.register('description')
 const deadline = form.register('deadline')
@@ -69,35 +74,27 @@ function onClose(): void {
 </script>
 
 <template>
-  <VcDialog @close="onClose">
-    <AppDialogContent class="w-dialog-sm">
-      <AppDialogHeader
-        :title="i18n.t('module.todos.create_todo_dialog.title')"
-        :description="i18n.t('module.todos.create_todo_dialog.description')"
+  <div class="py-4">
+    <AppForm :form="form">
+      <VcTextField
+        v-bind="toFormField(todoTitle)"
+        label="Titel"
       />
-      <div class="py-4">
-        <AppForm :form="form">
-          <VcTextField
-            v-bind="toFormField(todoTitle)"
-            label="Titel"
-          />
-          <VcTextarea
-            v-bind="toFormField(description)"
-            label="Opmerking"
-          />
-          <VcDateField
-            v-bind="toFormField(deadline)"
-            label="Deadline"
-          />
-          <AppDialogActions>
-            <FormSubmitButton
-              :form="form"
-              :label="i18n.t('shared.save')"
-              @confirm="onClose"
-            />
-          </AppDialogActions>
-        </AppForm>
-      </div>
-    </AppDialogContent>
-  </VcDialog>
+      <VcTextarea
+        v-bind="toFormField(description)"
+        label="Opmerking"
+      />
+      <VcDateField
+        v-bind="toFormField(deadline)"
+        label="Deadline"
+      />
+      <AppDialogActions>
+        <FormSubmitButton
+          :form="form"
+          :label="i18n.t('shared.save')"
+          @confirm="onClose"
+        />
+      </AppDialogActions>
+    </AppForm>
+  </div>
 </template>

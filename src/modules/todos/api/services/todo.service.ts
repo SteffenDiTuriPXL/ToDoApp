@@ -5,24 +5,36 @@ import type {
 
 import {
   createTodoControllerCreateTodoV1,
+  deleteTodoControllerDeleteTodoV1,
   getTodosControllerGetTodosV1,
+  getTodosControllerGetTodoV1,
+  updateTodoControllerUpdateTodoV1,
 } from '@/client'
+import type { TodoCreateForm } from '@/models/todo/create/todoCreateForm.model'
+import type { ToDoDetail } from '@/models/todo/index/todo.model'
 import type { TodoIndex } from '@/models/todo/index/todoIndex.model'
 import type { ToDoIndexFilters } from '@/models/todo/index/todoIndexFilters.model'
 import {
+  TodoCreateTransformer,
   ToDoIndexFiltersTransformer,
-  TodoTransformer,
+  TodoIndexTransformer,
+  ToDoTransformer,
 } from '@/models/todo/todo.transformer'
+import type { TodoUuid } from '@/models/todo/todoUuid.model'
 import { ObjectUtil } from '@/utils/object.util'
 import { PaginationDtoBuilder } from '@/utils/paginationDtoBuilder.util'
 
 export class TodoService {
-  static async create(title: string, description: string, deadline: string): Promise<void> {
+  static async create(form: TodoCreateForm): Promise<void> {
     await createTodoControllerCreateTodoV1({
-      body: {
-        title,
-        deadline,
-        description,
+      body: TodoCreateTransformer.toDto(form),
+    })
+  }
+
+  static async deleteByUuid(todoUuid: TodoUuid): Promise<void> {
+    await deleteTodoControllerDeleteTodoV1({
+      path: {
+        todoUuid,
       },
     })
   }
@@ -34,8 +46,27 @@ export class TodoService {
     })
 
     return {
-      data: response.data.items.map(TodoTransformer.fromDto),
+      data: response.data.items.map(TodoIndexTransformer.fromDto),
       meta: response.data.meta,
     }
+  }
+
+  static async getByUuid(todoUuid: TodoUuid): Promise<ToDoDetail> {
+    const response = await getTodosControllerGetTodoV1({
+      path: {
+        todoUuid,
+      },
+    })
+
+    return ToDoTransformer.fromDto(response.data)
+  }
+
+  static async update(todoUuid: TodoUuid, form: TodoCreateForm): Promise<void> {
+    await updateTodoControllerUpdateTodoV1({
+      body: TodoCreateTransformer.toDto(form),
+      path: {
+        todoUuid: todoUuid!,
+      },
+    })
   }
 }
