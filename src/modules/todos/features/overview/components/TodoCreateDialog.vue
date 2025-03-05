@@ -15,14 +15,8 @@ import AppForm from '@/components/form/AppForm.vue'
 import FormSubmitButton from '@/components/form/FormSubmitButton.vue'
 import { useApiErrorToast } from '@/composables/api-error-toast/apiErrorToast.composable.ts'
 import { toFormField } from '@/helpers/formango.helper'
-import { todoCreateSchema } from '@/models/todo/create/todoCreateForm.model'
-import type { TodoUuid } from '@/models/todo/todoUuid.model'
+import { todoCreateFormSchema } from '@/models/todo/create/todoCreateForm.model'
 import { useToDoCreateMutation } from '@/modules/todos/api/mutations/todoCreateMutation.model'
-import { useToDoUpdateMutation } from '@/modules/todos/api/mutations/todoUpdateMutation.model'
-
-const props = defineProps<{
-  todoUuid?: TodoUuid
-}>()
 
 const emit = defineEmits<{
   close: []
@@ -32,24 +26,12 @@ const i18n = useI18n()
 
 const apiErrorToast = useApiErrorToast()
 const todoCreateMutation = useToDoCreateMutation()
-const todoUpdateMutation = useToDoUpdateMutation()
 
 const form = useForm({
-  schema: todoCreateSchema,
+  schema: todoCreateFormSchema,
   onSubmit: async (values) => {
     try {
-      if (props.todoUuid) {
-        await todoUpdateMutation.execute({
-          body: values,
-          params: {
-            todoUuid: props.todoUuid,
-          },
-        })
-      }
-      else {
-        await todoCreateMutation.execute({ body: values })
-      }
-
+      await todoCreateMutation.execute({ body: values })
       emit('close')
       onClose()
     }
@@ -72,27 +54,28 @@ function onClose(): void {
   <VcDialog @close="onClose">
     <AppDialogContent class="w-dialog-sm">
       <AppDialogHeader
-        :title="i18n.t('module.todos.create_todo_dialog.title')"
-        :description="i18n.t('module.todos.create_todo_dialog.description')"
+        :title="i18n.t('module.todos.create_todo_dialog.dialog_title')"
+        :description="i18n.t('module.todos.create_todo_dialog.dialog_description')"
       />
       <div class="py-4">
         <AppForm :form="form">
           <VcTextField
             v-bind="toFormField(todoTitle)"
-            label="Titel"
+            :label="i18n.t('module.todos.create_todo_dialog.todo.title')"
           />
           <VcTextarea
             v-bind="toFormField(description)"
-            label="Opmerking"
+            :label="i18n.t('module.todos.create_todo_dialog.todo.description')"
           />
           <VcDateField
             v-bind="toFormField(deadline)"
-            label="Deadline"
+            :label="i18n.t('module.todos.create_todo_dialog.todo.deadline')"
           />
           <AppDialogActions>
             <FormSubmitButton
               :form="form"
               :label="i18n.t('shared.save')"
+              variant="default"
               @confirm="onClose"
             />
           </AppDialogActions>

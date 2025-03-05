@@ -10,7 +10,7 @@ import {
   getTodosControllerGetTodoV1,
   updateTodoControllerUpdateTodoV1,
 } from '@/client'
-import type { TodoCreateForm } from '@/models/todo/create/todoCreateForm.model'
+import type { TodoCreateFormSchema } from '@/models/todo/create/todoCreateForm.model'
 import type { ToDoDetail } from '@/models/todo/index/todo.model'
 import type { TodoIndex } from '@/models/todo/index/todoIndex.model'
 import type { ToDoIndexFilters } from '@/models/todo/index/todoIndexFilters.model'
@@ -25,7 +25,7 @@ import { ObjectUtil } from '@/utils/object.util'
 import { PaginationDtoBuilder } from '@/utils/paginationDtoBuilder.util'
 
 export class TodoService {
-  static async create(form: TodoCreateForm): Promise<void> {
+  static async create(form: TodoCreateFormSchema): Promise<void> {
     await createTodoControllerCreateTodoV1({
       body: TodoCreateTransformer.toDto(form),
     })
@@ -61,7 +61,7 @@ export class TodoService {
     return ToDoTransformer.fromDto(response.data)
   }
 
-  static async update(todoUuid: TodoUuid, form: TodoCreateForm): Promise<void> {
+  static async update(todoUuid: TodoUuid, form: TodoCreateFormSchema): Promise<void> {
     await updateTodoControllerUpdateTodoV1({
       body: TodoCreateTransformer.toDto(form),
       path: {

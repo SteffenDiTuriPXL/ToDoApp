@@ -141,18 +141,35 @@
     "overview": {
       "title": "My to do's"
     },
-    "title": "My to do's"
+    "title": "My to do's",
+    "edit": "..."
   },
   "module": {
     "todos": {
       "create_todo_dialog": {
         "title": "New to do",
-        "description": "Add a new to do."
+        "description": "Add a new to do.",
+        "todo": {
+          "title": "Title",
+          "description": "Description",
+          "deadline": "Deadline"
+        },
+        "dialog_description": " ",
+        "dialog_title": "New to do"
       },
       "update_todo_dialog": {
         "title": "My to do",
         "description": " "
+      },
+      "todo_list": {
+        "delete_todo": "Delete to do",
+        "edit_todo": "Edit to do"
       }
+    }
+  },
+  "todo": {
+    "label": {
+      "plural": "To Do's"
     }
   }
 }

@@ -13,8 +13,6 @@ import AppErrorState from '@/components/app/error-state/AppErrorState.vue'
 import AppPage from '@/components/layout/AppPage.vue'
 import type { TodoIndex } from '@/models/todo/index/todoIndex.model'
 import type { ToDoIndexFilters } from '@/models/todo/index/todoIndexFilters.model'
-import type { TodoUuid } from '@/models/todo/todoUuid.model'
-import { useToDoDeleteMutation } from '@/modules/todos/api/mutations/todoDeleteMutation.model'
 import { useTodoIndexQuery } from '@/modules/todos/api/queries/todoIndex.query'
 import TodoList from '@/modules/todos/features/overview/components/TodoList.vue'
 
@@ -26,8 +24,7 @@ const pagination = usePagination<ToDoIndexFilters>({
 })
 
 const todoIndexQuery = useTodoIndexQuery(pagination.paginationOptions)
-const todos = computed<TodoIndex[]>(() => todoIndexQuery.data.value?.data || [])
-const deleteMutation = useToDoDeleteMutation()
+const todos = computed<TodoIndex[]>(() => todoIndexQuery.data.value?.data ?? [])
 
 const isLoading = computed<boolean>(() => todoIndexQuery.isLoading.value)
 const error = computed<unknown>(() => todoIndexQuery.error.value)
@@ -36,38 +33,14 @@ const createDialog = useDialog({
   component: () => import('@/modules/todos/features/overview/components/TodoCreateDialog.vue'),
 })
 
-const updateDialog = useDialog({
-  component: () => import('@/modules/todos/features/overview/components/TodoUpdateDialog.vue'),
-})
-
 async function openCreateDialog() {
   await createDialog.open({})
-}
-
-async function openUpdateDialog(todoUuid: TodoUuid) {
-  await updateDialog.open({
-    todoUuid,
-  })
-}
-
-async function handleDelete(todoUuid: TodoUuid) {
-  try {
-    await deleteMutation.execute({
-      body: todoUuid,
-    })
-    await todoIndexQuery.refetch()
-  }
-  catch (error) {
-    console.error('Error deleting todo:', error)
-  }
 }
 </script>
 
 <template>
   <AppPage :title="i18n.t('todos.title')">
-    <div
-      v-if="error !== null"
-    >
+    <div v-if="error !== null">
       <AppErrorState :error="error" />
     </div>
 
@@ -87,17 +60,14 @@ async function handleDelete(todoUuid: TodoUuid) {
         :pagination="pagination"
         :error="todoIndexQuery.error.value"
         class="w-1/2 mx-auto"
-        @delete="handleDelete"
-        @update="openUpdateDialog"
-      />
-
-      <VcIconButton
-        variant="secondary"
-        icon="plus"
-        label="NewToDO"
-        class="fixed bottom-0 right-0"
-        @click="openCreateDialog"
       />
     </div>
+    <VcIconButton
+      variant="secondary"
+      icon="plus"
+      label="NewTodo"
+      class="!fixed !bottom-4 !right-4 !z-50"
+      @click="openCreateDialog"
+    />
   </AppPage>
 </template>

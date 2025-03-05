@@ -2,7 +2,7 @@ import { CalendarDateTransformer } from '@/models/date/calendarDate.transformer'
 
 import type { CalendarDateDto } from '../date/calendarDateDto.model'
 import type { ToDoCreateDto } from './create/todoCreateDto.model'
-import type { TodoCreateForm } from './create/todoCreateForm.model'
+import type { TodoCreateFormSchema } from './create/todoCreateForm.model'
 import type { ToDoDetail } from './index/todo.model'
 import type { TodoDto } from './index/todoDto.model'
 import type { TodoIndex } from './index/todoIndex.model'
@@ -17,7 +17,7 @@ export class TodoIndexTransformer {
       uuid: dto.uuid as TodoUuid,
       title: dto.title,
       createdAt: dto.createdAt ? CalendarDateTransformer.fromDto(dto.createdAt as CalendarDateDto) : new Date(),
-      updatedAt: dto.updatedAt ? CalendarDateTransformer.fromDto(dto.createdAt as CalendarDateDto) : new Date(),
+      updatedAt: dto.updatedAt ? CalendarDateTransformer.fromDto(dto.updatedAt as CalendarDateDto) : new Date(),
       isCompleted: dto.completed,
       deadline: dto.deadline,
       description: dto.description,
@@ -32,7 +32,7 @@ export class ToDoIndexFiltersTransformer {
 }
 
 export class TodoCreateTransformer {
-  static toDto(form: TodoCreateForm): ToDoCreateDto {
+  static toDto(form: TodoCreateFormSchema): ToDoCreateDto {
     return {
       title: form.title,
       deadline: form.deadline ? CalendarDateTransformer.toDto(form.deadline) : null,
